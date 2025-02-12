@@ -1,0 +1,41 @@
+﻿<Window x:Class="Projekt_02._25.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Projekt_02._25"
+        mc:Ignorable="d"
+        Title="Aplikacja do szyfrowania/deszyfrowania" Height="650" Width="1000">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.03*"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Menu Grid.ColumnSpan="2">
+            <MenuItem Header="Plik"></MenuItem>
+            <MenuItem Header="Edycja"></MenuItem>
+            <MenuItem Header="Widok"></MenuItem>
+            <MenuItem Header="Pomoc"></MenuItem>
+        </Menu>
+
+        <GroupBox Header="Ustawienia szyfrowania/deszyfrowania" Grid.Row="1" Grid.Column="0">
+            <StackPanel>
+                <Label>Algorytm szyfrujący: </Label>
+                <Expander IsExpanded="False">
+                    <ListBox>
+                        <ListBoxItem>Szyfr Cezara</ListBoxItem>
+                        <ListBoxItem>Szyfr Vigenère’a</ListBoxItem>
+                        <ListBoxItem>Szyfr Affine</ListBoxItem>
+                        <ListBoxItem>Szyfr płotkowy</ListBoxItem>
+                    </ListBox>
+                </Expander>
+
+            </StackPanel>
+        </GroupBox>
+        
+    </Grid>
+</Window>
