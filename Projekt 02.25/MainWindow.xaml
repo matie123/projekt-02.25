@@ -27,13 +27,35 @@
                 <Label>Algorytm szyfrujący: </Label>
                 <Expander IsExpanded="False">
                     <ListBox>
-                        <ListBoxItem>Szyfr Cezara</ListBoxItem>
-                        <ListBoxItem>Szyfr Vigenère’a</ListBoxItem>
-                        <ListBoxItem>Szyfr Affine</ListBoxItem>
-                        <ListBoxItem>Szyfr płotkowy</ListBoxItem>
+                        <ListBoxItem x:Name="caesarCipher">Szyfr Cezara</ListBoxItem>
+                        <ListBoxItem x:Name="vigenereCipher">Szyfr Vigenère’a</ListBoxItem>
+                        <ListBoxItem x:Name="affineCipher">Szyfr Affine</ListBoxItem>
+                        <ListBoxItem x:Name="fenceCipher">Szyfr płotkowy</ListBoxItem>
                     </ListBox>
                 </Expander>
 
+                <StackPanel x:Name="shiftPANEL" Orientation="Horizontal" Margin="0, 0, 0, 5">
+                    <Label MinWidth="100">Przesunięcie:</Label>
+                    <TextBox PreviewTextInput="attribute_PreviewTextInput" PreviewKeyDown="attribute_PreviewKeyDown" x:Name="shiftInput" Width="150"></TextBox>
+                </StackPanel>
+                <StackPanel x:Name="keyPANEL" Orientation="Horizontal" Margin="0, 0, 0, 5">
+                    <Label MinWidth="100">Klucz:</Label>
+                    <TextBox PreviewTextInput="attribute_PreviewTextInput" PreviewKeyDown="attribute_PreviewKeyDown" x:Name="keyInput" Width="150"></TextBox>
+                </StackPanel>
+                <StackPanel x:Name="aPANEL" Orientation="Horizontal" Margin="0, 0, 0, 5">
+                    <Label MinWidth="100">Wartość A:</Label>
+                    <TextBox PreviewTextInput="attribute_PreviewTextInput" PreviewKeyDown="attribute_PreviewKeyDown" x:Name="aInput" Width="150"></TextBox>
+                </StackPanel>
+                <StackPanel x:Name="bPANEL" Orientation="Horizontal" Margin="0, 0, 0, 5">
+                    <Label MinWidth="100">Wartość B:</Label>
+                    <TextBox PreviewTextInput="attribute_PreviewTextInput" PreviewKeyDown="attribute_PreviewKeyDown" x:Name="bInput" Width="150"></TextBox>
+                </StackPanel>
+                <Label>Tekst szyfrowany/deszyfrowany(max.150 znaków):</Label>
+                <TextBox Height="100" MaxLength="150" TextWrapping="Wrap"></TextBox>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Click="Encode" FontSize="20" Margin="5">Szyfruj!</Button>
+                    <Button Click="Decode" FontSize="20" Margin="5">Deszyfruj!</Button>
+                </StackPanel>
             </StackPanel>
         </GroupBox>
         
