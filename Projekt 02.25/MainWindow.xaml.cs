@@ -29,6 +29,50 @@ namespace Projekt_02._25
             InitializeComponent();
         }
 
+        public string caesarEncode(string input, int shift)
+        {
+            string output = "";
+
+            foreach (char c in input)
+            {
+                if (char.IsLetter(c)) // Sprawdzam, czy znak to litera
+                {
+                    char baseChar = char.IsUpper(c) ? 'A' : 'a'; // Określam bazę dla przesunięcia(początek w tablicy ASCII dla szyfrowania)
+                    char shiftedChar = (char)(baseChar + (c - baseChar + shift) % 26);
+                    output += shiftedChar;
+                }
+                else
+                {
+                    output += c; // Nie zmieniam znaków niebędących literami
+                }
+            }
+
+
+            return output;
+        }
+
+        public string caesarDecode(string input, int shift)
+        {
+            string output = "";
+
+            foreach (char c in input)
+            {
+                if (char.IsLetter(c)) // Sprawdzam, czy znak to litera
+                {
+                    char baseChar = char.IsUpper(c) ? 'A' : 'a'; // Określam bazę dla przesunięcia(początek w tablicy ASCII dla szyfrowania)
+                    char shiftedChar = (char)(baseChar + (c - baseChar - shift % 26 + 26)%26); //Chore
+                    output += shiftedChar;
+                }
+                else
+                {
+                    output += c; // Nie zmieniam znaków niebędących literami
+                }
+            }
+
+
+            return output;
+        }
+
         private void attribute_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Space)
@@ -50,10 +94,27 @@ namespace Projekt_02._25
 
         private void Encode(object sender, RoutedEventArgs e)
         {
-            int cipher = -1; //0 - cezara 1 - vigenera(czy jak mu tam) 2 - affine 3 - płotkowy
+            if (!caesarCipher.IsSelected && !vigenereCipher.IsSelected && !affineCipher.IsSelected && fenceCipher.IsSelected)
+            {
+                MessageBox.Show("Ustal szyfr!!!");
+                return;
+            }
+
+            int cipher = -1; //0 - cezara 1 - vigenera(czy jak mu tam) 2 - affine 3 - płotkowy **Czy to jest potrzebne?
+            string input = endecodeInput.Text, output = "";
+            int shift = Int32.Parse(shiftInput.Text);
+
+
+
             if (caesarCipher.IsSelected)
             {
+                if (shift < 0 || shift == null) 
+                {
+                    MessageBox.Show("Podaj przesunięcie!");
+                    return;
+                }
                 cipher = 0;
+                output = caesarEncode(input, shift);
             }else if (vigenereCipher.IsSelected)
             {
                 cipher = 1;
@@ -65,6 +126,9 @@ namespace Projekt_02._25
                 cipher = 3;
             }
 
+            endecodeOutput.Text = output;
+
+            /*
             string caesarEncode(string input, int shift)
             {
                 return input; //TODO
@@ -82,15 +146,19 @@ namespace Projekt_02._25
                 return input; //TODOOOOO
             }
 
-
+            */ //RACZEJ DO ZMIANY, FUNKCJE NA GÓRĘ JAKO PUBLIC, COKOLWIEK BY TO PUBLIC NIE ZNACZYŁO ****
 
         }
         private void Decode(object sender, RoutedEventArgs e)
         {
             int cipher = -1; //0 - cezara 1 - vigenera(czy jak mu tam) 2 - affine 3 - płotkowy
+            string input = endecodeInput.Text, output = "";
+            int shift = Int32.Parse(shiftInput.Text);
+
             if (caesarCipher.IsSelected)
             {
                 cipher = 0;
+                output = caesarDecode(input, shift);
             }
             else if (vigenereCipher.IsSelected)
             {
@@ -105,6 +173,9 @@ namespace Projekt_02._25
                 cipher = 3;
             }
 
+            endecodeOutput.Text = output;
+
+            /*
             string caesarDecode(string input, int shift)
             {
                 return input; //TODO
@@ -121,6 +192,7 @@ namespace Projekt_02._25
             {
                 return input; //TODOOOOO
             }
+            */
         }
     }
 }

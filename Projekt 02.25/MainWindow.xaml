@@ -51,11 +51,13 @@
                     <TextBox PreviewTextInput="attribute_PreviewTextInput" PreviewKeyDown="attribute_PreviewKeyDown" x:Name="bInput" Width="150"></TextBox>
                 </StackPanel>
                 <Label>Tekst szyfrowany/deszyfrowany(max.150 znaków):</Label>
-                <TextBox Height="100" MaxLength="150" TextWrapping="Wrap"></TextBox>
+                <TextBox x:Name="endecodeInput" Height="100" MaxLength="150" TextWrapping="Wrap"></TextBox>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <Button Click="Encode" FontSize="20" Margin="5">Szyfruj!</Button>
                     <Button Click="Decode" FontSize="20" Margin="5">Deszyfruj!</Button>
                 </StackPanel>
+                <Label>Tekst zaszyfrowany/odszyfrowany:</Label>
+                <TextBox x:Name="endecodeOutput" Height="100" IsReadOnly="True" TextWrapping="Wrap"></TextBox>
             </StackPanel>
         </GroupBox>
         
