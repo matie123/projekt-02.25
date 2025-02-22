@@ -26,7 +26,7 @@
             <StackPanel>
                 <Label>Algorytm szyfrujący: </Label>
                 <Expander IsExpanded="False">
-                    <ListBox>
+                    <ListBox x:Name="cipherListBox" SelectionChanged="ListBox_SelectionChanged">
                         <ListBoxItem x:Name="caesarCipher">Szyfr Cezara</ListBoxItem>
                         <ListBoxItem x:Name="vigenereCipher">Szyfr Vigenère’a</ListBoxItem>
                         <ListBoxItem x:Name="affineCipher">Szyfr Affine</ListBoxItem>
@@ -34,19 +34,19 @@
                     </ListBox>
                 </Expander>
 
-                <StackPanel x:Name="shiftPANEL" Orientation="Horizontal" Margin="0, 0, 0, 5">
+                <StackPanel Visibility="Collapsed" x:Name="shiftPANEL" Orientation="Horizontal" Margin="0, 0, 0, 5">
                     <Label MinWidth="100">Przesunięcie:</Label>
                     <TextBox PreviewTextInput="attribute_PreviewTextInput" PreviewKeyDown="attribute_PreviewKeyDown" x:Name="shiftInput" Width="150"></TextBox>
                 </StackPanel>
-                <StackPanel x:Name="keyPANEL" Orientation="Horizontal" Margin="0, 0, 0, 5">
+                <StackPanel Visibility="Collapsed" x:Name="keyPANEL" Orientation="Horizontal" Margin="0, 0, 0, 5">
                     <Label MinWidth="100">Klucz:</Label>
-                    <TextBox PreviewTextInput="attribute_PreviewTextInput" PreviewKeyDown="attribute_PreviewKeyDown" x:Name="keyInput" Width="150"></TextBox>
+                    <TextBox PreviewKeyDown="attribute_PreviewKeyDown" x:Name="keyInput" Width="150"></TextBox>
                 </StackPanel>
-                <StackPanel x:Name="aPANEL" Orientation="Horizontal" Margin="0, 0, 0, 5">
+                <StackPanel Visibility="Collapsed" x:Name="aPANEL" Orientation="Horizontal" Margin="0, 0, 0, 5">
                     <Label MinWidth="100">Wartość A:</Label>
                     <TextBox PreviewTextInput="attribute_PreviewTextInput" PreviewKeyDown="attribute_PreviewKeyDown" x:Name="aInput" Width="150"></TextBox>
                 </StackPanel>
-                <StackPanel x:Name="bPANEL" Orientation="Horizontal" Margin="0, 0, 0, 5">
+                <StackPanel Visibility="Collapsed" x:Name="bPANEL" Orientation="Horizontal" Margin="0, 0, 0, 5">
                     <Label MinWidth="100">Wartość B:</Label>
                     <TextBox PreviewTextInput="attribute_PreviewTextInput" PreviewKeyDown="attribute_PreviewKeyDown" x:Name="bInput" Width="150"></TextBox>
                 </StackPanel>

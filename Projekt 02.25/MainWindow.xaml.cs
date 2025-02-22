@@ -73,6 +73,114 @@ namespace Projekt_02._25
             return output;
         }
 
+        public string vigenereEncode(string input, string key)
+        {
+            string output = "";
+            int keyIndex = 0;
+            int keyLength = key.Length;
+
+            foreach (char c in input)
+            {
+                if (char.IsLetter(c)) // Sprawdzam, czy znak to litera
+                {
+                    char baseChar = char.IsUpper(c) ? 'A' : 'a'; // Ustalam bazę (A dla wielkich liter, a dla małych)
+                    int shift = char.ToUpper(key[keyIndex % keyLength]) - 'A'; // Obliczam przesunięcie na podstawie klucza
+                    char encodedChar = (char)(baseChar + (c - baseChar + shift) % 26); // Wykonuję przesunięcie
+                    output += encodedChar;
+                    keyIndex++; // Przechodzę do kolejnego znaku klucza
+                }
+                else
+                {
+                    output += c; // Nie zmieniam znaków, które nie są literami
+                }
+            }
+
+            return output;
+        }
+
+        public string vigenereDecode(string input, string key)
+        {
+            string output = "";
+            int keyIndex = 0;
+            int keyLength = key.Length;
+
+            foreach (char c in input)
+            {
+                if (char.IsLetter(c))
+                {
+                    char baseChar = char.IsUpper(c) ? 'A' : 'a';
+                    int shift = char.ToUpper(key[keyIndex % keyLength]) - 'A';
+                    char decodedChar = (char)(baseChar + (c - baseChar - shift + 26) % 26); // Odejmujemy zamiast dodawać
+                    output += decodedChar;
+                    keyIndex++;
+                }
+                else
+                {
+                    output += c;
+                }
+            }
+
+            return output;
+        }
+
+        public string affineEncode(string input, int a, int b)
+        {
+            string output = "";
+
+            foreach(char c in input)
+            {
+                if (char.IsLetter(c))
+                {
+                    char baseChar = char.IsUpper(c) ? 'A' : 'a';
+                    int x = c - baseChar; // Zamieniam znak na zakres 0-25 (żeby było tak jak w tuto)
+                    int encodedX = (a*x + b) % 26;
+                    char encodedChar = (char)(baseChar + encodedX); // Wydaje się, że nie potrzebne i można by to w linijce z outputem zrobić, ale nie - za nic nie działa, więc zostawiam tak
+                    output += encodedChar; // Dodanie zaszyfrowanego znaku przekonwertowanego z powrotem na ASCII
+                }
+                else
+                {
+                    output += c;
+                }
+            }
+
+            return output;
+        }
+
+        public string affineDecode(string input, int a, int b)
+        {
+            //D(x)= a^−1*(x−b) mod 26 (wzór do deszyfrowania z tuto)
+
+            string output = "";
+            int aInverse = 0;
+
+            for (int i = 0; i < 26; i++) //Do odzszyfrowania szyfrem afinicznym potrzebujemy a^-1, tak je znajdujemy:
+            {
+                if ((a * i) % 26 == 1)
+                {
+                    aInverse = i;
+                    break;
+                }
+            }
+
+            foreach (char c in input)
+            {
+                if (char.IsLetter(c))
+                {
+                    char baseChar = char.IsUpper(c) ? 'A' : 'a';
+                    int x = c - baseChar; // Zamieniam znak na zakres 0-25 (żeby było tak jak w tuto)
+
+                    int decodedChar = (aInverse * (x - b + 26)) % 26;
+                    output += (char)(baseChar + decodedChar);
+                }
+                else
+                {
+                    output += c;
+                }
+            }
+
+            return output;
+        }
+
         private void attribute_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Space)
@@ -102,58 +210,131 @@ namespace Projekt_02._25
 
             int cipher = -1; //0 - cezara 1 - vigenera(czy jak mu tam) 2 - affine 3 - płotkowy **Czy to jest potrzebne?
             string input = endecodeInput.Text, output = "";
-            int shift = Int32.Parse(shiftInput.Text);
 
+            int shift = 0; //Do cezara
+            int aValue = 0, bValue = 0; //Do affine
 
-
-            if (caesarCipher.IsSelected)
+            if (caesarCipher.IsSelected == true)
             {
-                if (shift < 0 || shift == null) 
+                if (shiftInput.Text.Length > 0)
+                {
+                    try
+                    {
+                        shift = Int32.Parse(shiftInput.Text);
+                    }
+                    catch (Exception exc)
+                    {
+                        MessageBox.Show($"Error: {exc.Message}"); // To nie z czata, visual to wygenerował
+                        return;                                   // (i nie wiem czy działa, bo póki co żadnych
+                                                                  // błędów nie złapało)
+                    }
+                }
+                else
                 {
                     MessageBox.Show("Podaj przesunięcie!");
                     return;
                 }
+
+            }
+            else if (affineCipher.IsSelected == true)
+            {
+                if (aInput.Text.Length > 0 && bInput.Text.Length > 0)
+                {
+                    try // Przydatna rzecz
+                    {
+                        aValue = Int32.Parse(aInput.Text);
+                        bValue = Int32.Parse(bInput.Text);
+                    }
+                    catch (Exception exc)
+                    {
+                        MessageBox.Show($"Error: {exc.Message}");
+                        return;
+                    }
+                }
+            }
+            string key = keyInput.Text;
+
+
+
+            //SZYFRY
+            if (caesarCipher.IsSelected) //CEZAR
+            {
                 cipher = 0;
                 output = caesarEncode(input, shift);
-            }else if (vigenereCipher.IsSelected)
+            }
+
+            else if (vigenereCipher.IsSelected) //VIGENERE
             {
+                if(key == ""|| key == null)
+                {
+                    MessageBox.Show("Podaj klucz!");
+                    return;
+                }
                 cipher = 1;
-            }else if (affineCipher.IsSelected)
+                output = vigenereEncode(input, key);
+            }
+
+            else if (affineCipher.IsSelected) //AFINICZNY (tak to się po polsku pisze?)
             {
                 cipher = 2;
-            }else if (fenceCipher.IsSelected)
+                output = affineEncode(input, aValue, bValue);
+            }
+
+            else if (fenceCipher.IsSelected) // PŁOTKOWY
             {
                 cipher = 3;
             }
 
             endecodeOutput.Text = output;
 
-            /*
-            string caesarEncode(string input, int shift)
-            {
-                return input; //TODO
-            }
-            string vigenereEncode(string input, string key)
-            {
-                return input; //TODO
-            }
-            string affineEncode(string input, int a, int b)
-            {
-                return input; //TODO
-            }
-            string fenceEncode(string input, int shift) // ??SHIFT/KEY ?? ****
-            {
-                return input; //TODOOOOO
-            }
-
-            */ //RACZEJ DO ZMIANY, FUNKCJE NA GÓRĘ JAKO PUBLIC, COKOLWIEK BY TO PUBLIC NIE ZNACZYŁO ****
-
         }
         private void Decode(object sender, RoutedEventArgs e)
         {
             int cipher = -1; //0 - cezara 1 - vigenera(czy jak mu tam) 2 - affine 3 - płotkowy
             string input = endecodeInput.Text, output = "";
-            int shift = Int32.Parse(shiftInput.Text);
+            int shift = 0, aValue = 0, bValue = 0;
+            string key = keyInput.Text;
+
+
+            if (caesarCipher.IsSelected == true)
+            {
+                if (shiftInput.Text.Length > 0)
+                {
+                    try
+                    {
+                        shift = Int32.Parse(shiftInput.Text);
+                    }
+                    catch (Exception exc)
+                    {
+                        MessageBox.Show($"Error: {exc.Message}"); // To nie z czata, visual to wygenerował
+                        return;                                   // (i nie wiem czy działa, bo póki co żadnych
+                                                                  // błędów nie złapało)
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Podaj przesunięcie!");
+                    return;
+                }
+
+            }
+            else if (affineCipher.IsSelected == true)
+            {
+                if (aInput.Text.Length > 0 && bInput.Text.Length > 0)
+                {
+                    try // Przydatna rzecz
+                    {
+                        aValue = Int32.Parse(aInput.Text);
+                        bValue = Int32.Parse(bInput.Text);
+                    }
+                    catch (Exception exc)
+                    {
+                        MessageBox.Show($"Error: {exc.Message}");
+                        return;
+                    }
+                }
+            }
+
 
             if (caesarCipher.IsSelected)
             {
@@ -162,11 +343,18 @@ namespace Projekt_02._25
             }
             else if (vigenereCipher.IsSelected)
             {
+                if (key == "" || key == null)
+                {
+                    MessageBox.Show("Podaj przesunięcie!");
+                    return;
+                }
                 cipher = 1;
+                output = vigenereDecode(input, key);
             }
             else if (affineCipher.IsSelected)
             {
                 cipher = 2;
+                output = affineDecode(input, aValue, bValue);
             }
             else if (fenceCipher.IsSelected)
             {
@@ -175,24 +363,37 @@ namespace Projekt_02._25
 
             endecodeOutput.Text = output;
 
-            /*
-            string caesarDecode(string input, int shift)
+        }
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cipherListBox.SelectedItem == null) return;
+
+            string selectedCipher = (cipherListBox.SelectedItem as ListBoxItem).Content.ToString(); //Wybrany szyfr
+
+            
+            shiftPANEL.Visibility = Visibility.Collapsed;
+            keyPANEL.Visibility = Visibility.Collapsed;
+            aPANEL.Visibility = Visibility.Collapsed;
+            bPANEL.Visibility = Visibility.Collapsed;
+
+            
+            switch (selectedCipher)
             {
-                return input; //TODO
+                case "Szyfr Cezara":
+                    shiftPANEL.Visibility = Visibility.Visible;
+                    break;
+                case "Szyfr Vigenère’a":
+                    keyPANEL.Visibility = Visibility.Visible;
+                    break;
+                case "Szyfr Affine":
+                    aPANEL.Visibility = Visibility.Visible;
+                    bPANEL.Visibility = Visibility.Visible;
+                    break;
+                case "Szyfr płotkowy":
+                    keyPANEL.Visibility = Visibility.Visible; 
+                    break;
             }
-            string vigenereDecode(string input, string key)
-            {
-                return input; //TODO
-            }
-            string affineDecode(string input, int a, int b)
-            {
-                return input; //TODO
-            }
-            string fenceDecode(string input, int shift) // ??SHIFT/KEY ?? ****
-            {
-                return input; //TODOOOOO
-            }
-            */
         }
     }
 }
