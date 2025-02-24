@@ -181,22 +181,115 @@ namespace Projekt_02._25
             return output;
         }
 
+        public string fenceEncode(string input, int fenceHeight) //Doesn't handle spaces
+        {
+            string output = "";
+
+            List<char>[] array = new List<char>[fenceHeight];
+            for (int i = 0; i < fenceHeight; i++)
+            {
+                array[i] = new List<char>();
+            }
+
+            bool incrOrDecr = false; //increment or decrement arrayRow [false - increment, true - decrement]
+            int arrayRow = 0;
+
+            foreach (char c in input)
+            {
+                if (char.IsLetter(c))
+                {
+                    //Appending to array
+                    array[arrayRow].Add(c);
+                    //if (arrayRow == fenceHeight - 1 || arrayRow == 0) incrOrDecr = !incrOrDecr;
+                    //arrayRow = incrOrDecr ? (arrayRow - 1) : (arrayRow + 1);
+                    if (arrayRow == fenceHeight - 1) //Change of direction
+                        incrOrDecr = true;
+                    else if (arrayRow == 0)
+                        incrOrDecr = false;
+                    arrayRow += incrOrDecr ? -1 : 1;
+
+                }
+
+            }
+
+            //Receiving encrypted message from array
+
+            foreach (List<char> row in array)
+            {
+                foreach (char receivedCharacter in row)
+                {
+                    output += receivedCharacter;
+                }
+            }
+
+            return output;
+        }
+
+        public string fenceDecode(string input, int fenceHeight)
+        {
+            string output = "";
+
+            List<char>[] array = new List<char>[fenceHeight];
+            for (int i = 0; i < fenceHeight; i++)
+            {
+                array[i] = new List<char>();
+            }
+
+            bool incrOrDecr = false; //increment or decrement arrayRow [false - increment, true - decrement]
+            int arrayRow = 0;
+
+            int[] rowPattern = new int[input.Length]; // Generating fictional fence with arrayRows for each character
+            for (int i = 0; i < input.Length; i++)
+            {
+                rowPattern[i] = arrayRow;
+
+                if (arrayRow == fenceHeight - 1)
+                    incrOrDecr = true;
+                else if (arrayRow == 0)
+                    incrOrDecr = false;
+
+                arrayRow += incrOrDecr ? -1 : 1;
+            }
+
+            int charIndex = 0;
+            for (int row = 0; row < fenceHeight; row++)
+            {
+                for (int i = 0; i < input.Length; i++)
+                {
+                    if (rowPattern[i] == row)
+                    {
+                        array[row].Add(input[charIndex]);
+                        charIndex++;
+                    }
+                }
+            }
+
+            int iterator = 0;
+            foreach (int row in rowPattern)
+            {
+                output += array[row][iterator];
+                iterator++;
+            }
+
+            return output;
+        }
+
         private void attribute_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Space)
-                e.Handled = true; // Blokuje spację
+                e.Handled = true; // Blocking space
 
             if (e.Key == Key.V && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
             {
                 if (!Regex.IsMatch(Clipboard.GetText(), attributeRegex))
-                    e.Handled = true; // Blokuje wklejanie znaków, które nie są cyframi
+                    e.Handled = true; // Blocking character pasting which are not numbers
             }
         }
 
         private void attribute_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             if (!Regex.IsMatch(e.Text, attributeRegex)){
-                e.Handled = true; //Uniemożliwiamy wpisanie danego znaku, który nie jest cyfrą
+                e.Handled = true; //Unabling user to enter character, which is not number
             }
         }
 
@@ -211,8 +304,8 @@ namespace Projekt_02._25
             int cipher = -1; //0 - cezara 1 - vigenera(czy jak mu tam) 2 - affine 3 - płotkowy **Czy to jest potrzebne?
             string input = endecodeInput.Text, output = "";
 
-            int shift = 0; //Do cezara
-            int aValue = 0, bValue = 0; //Do affine
+            int shift = 0; //For Caesar cipher
+            int aValue = 0, bValue = 0; //For affine cipher
 
             if (caesarCipher.IsSelected == true)
             {
