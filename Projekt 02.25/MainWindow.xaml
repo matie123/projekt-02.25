@@ -5,21 +5,48 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Projekt_02._25"
         mc:Ignorable="d"
-        Title="Aplikacja do szyfrowania/deszyfrowania" Height="650" Width="1000">
+        Title="Aplikacja do szyfrowania/deszyfrowania" Height="650" Width="600">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
+
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.03*"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Menu Grid.ColumnSpan="2">
-            <MenuItem Header="Plik"></MenuItem>
-            <MenuItem Header="Edycja"></MenuItem>
-            <MenuItem Header="Widok"></MenuItem>
-            <MenuItem Header="Pomoc"></MenuItem>
+            <MenuItem Header="Plik">
+                <MenuItem Header="Nowy"></MenuItem>
+                <MenuItem Header="Zapisz"></MenuItem>
+                <MenuItem Header="Zakończ" InputGestureText="Alt+F4"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Edycja">
+                <MenuItem Header="Kopiuj"></MenuItem>
+                <MenuItem Header="Wklej"></MenuItem>
+                <MenuItem Header="Wytnij"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Widok">
+                <MenuItem Header="Czcionka">
+                    <MenuItem Header="Rozmiar czcionki">
+                        <MenuItem Header="8"></MenuItem>
+                        <MenuItem Header="10"></MenuItem>
+                        <MenuItem Header="12"></MenuItem>
+                        <MenuItem Header="14"></MenuItem>
+                        <MenuItem Header="16"></MenuItem>
+                        <MenuItem Header="18"></MenuItem>
+                    </MenuItem>
+                    <MenuItem Header="Czcionka">
+                        <MenuItem Header="Calibri"></MenuItem>
+                        <MenuItem Header="Times New Roman"></MenuItem>
+                        <MenuItem Header="Verdana"></MenuItem>
+                    </MenuItem>
+                    <MenuItem Header="Pogrubienie"></MenuItem>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Pomoc">
+                <MenuItem Header="O programie"></MenuItem>
+            </MenuItem>
         </Menu>
 
         <GroupBox Header="Ustawienia szyfrowania/deszyfrowania" Grid.Row="1" Grid.Column="0">

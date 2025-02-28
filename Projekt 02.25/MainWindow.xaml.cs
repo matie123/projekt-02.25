@@ -264,11 +264,11 @@ namespace Projekt_02._25
                 }
             }
 
-            int iterator = 0;
+            int[] rowReadIndex = new int[fenceHeight]; // Indywidualne wskaźniki dla każdej listy
             foreach (int row in rowPattern)
             {
-                output += array[row][iterator];
-                iterator++;
+                output += array[row][rowReadIndex[row]];
+                rowReadIndex[row]++;
             }
 
             return output;
@@ -295,7 +295,7 @@ namespace Projekt_02._25
 
         private void Encode(object sender, RoutedEventArgs e)
         {
-            if (!caesarCipher.IsSelected && !vigenereCipher.IsSelected && !affineCipher.IsSelected && fenceCipher.IsSelected)
+            if (!caesarCipher.IsSelected && !vigenereCipher.IsSelected && !affineCipher.IsSelected && !fenceCipher.IsSelected)
             {
                 MessageBox.Show("Ustal szyfr!!!");
                 return;
@@ -303,9 +303,9 @@ namespace Projekt_02._25
 
             int cipher = -1; //0 - cezara 1 - vigenera(czy jak mu tam) 2 - affine 3 - płotkowy **Czy to jest potrzebne?
             string input = endecodeInput.Text, output = "";
-
+            string key = "";
             int shift = 0; //For Caesar cipher
-            int aValue = 0, bValue = 0; //For affine cipher
+            int aValue = 0, bValue = 0, fenceHeight = 0; //For affine cipher
 
             if (caesarCipher.IsSelected == true)
             {
@@ -344,8 +344,60 @@ namespace Projekt_02._25
                         return;
                     }
                 }
+                else
+                {
+                    MessageBox.Show("Podaj wartości a oraz b");
+                    return;
+                }
             }
-            string key = keyInput.Text;
+            else if (fenceCipher.IsSelected == true)
+            {
+                if (keyInput.Text.Length > 0)
+                {
+                    try // Przydatna rzecz
+                    {
+                        fenceHeight = Int32.Parse(keyInput.Text);
+                    }
+                    catch (Exception exc)
+                    {
+                        MessageBox.Show($"Error: {exc.Message}");
+                        return;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Podaj klucz (wysokość płotka)");
+                    return;
+                }
+            }
+            else if (vigenereCipher.IsSelected == true)
+            {
+                bool isNotNumerical = true;
+                for(int i = 0; i < keyInput.Text.Length; i++)
+                {
+                    if (!Char.IsLetter(keyInput.Text[i])) isNotNumerical = false; // Sprawdzam, czy klucz jest poprawny
+                }
+
+                if (keyInput.Text.Length > 0 && isNotNumerical)
+                {
+                    try // Przydatna rzecz
+                    {
+                        key = keyInput.Text;
+                    }
+                    catch (Exception exc)
+                    {
+                        MessageBox.Show($"Error: {exc.Message}");
+                        return;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Podaj poprawny klucz!");
+                    return;
+                }
+            }
+
+            
 
 
 
@@ -376,6 +428,7 @@ namespace Projekt_02._25
             else if (fenceCipher.IsSelected) // PŁOTKOWY
             {
                 cipher = 3;
+                output = fenceEncode(input, fenceHeight);
             }
 
             endecodeOutput.Text = output;
@@ -383,9 +436,15 @@ namespace Projekt_02._25
         }
         private void Decode(object sender, RoutedEventArgs e)
         {
+            if (!caesarCipher.IsSelected && !vigenereCipher.IsSelected && !affineCipher.IsSelected && !fenceCipher.IsSelected)
+            {
+                MessageBox.Show("Ustal szyfr!!!");
+                return;
+            }
+
             int cipher = -1; //0 - cezara 1 - vigenera(czy jak mu tam) 2 - affine 3 - płotkowy
             string input = endecodeInput.Text, output = "";
-            int shift = 0, aValue = 0, bValue = 0;
+            int shift = 0, aValue = 0, bValue = 0, fenceHeight = 0;
             string key = keyInput.Text;
 
 
@@ -426,6 +485,57 @@ namespace Projekt_02._25
                         return;
                     }
                 }
+                else
+                {
+                    MessageBox.Show("Podaj wartości a oraz b");
+                    return;
+                }
+            }
+            else if (fenceCipher.IsSelected == true)
+            {
+                if (keyInput.Text.Length > 0)
+                {
+                    try // Przydatna rzecz
+                    {
+                        fenceHeight = Int32.Parse(keyInput.Text);
+                    }
+                    catch (Exception exc)
+                    {
+                        MessageBox.Show($"Error: {exc.Message}");
+                        return;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Podaj klucz (wysokość płotka)");
+                    return;
+                }
+            }
+            else if (vigenereCipher.IsSelected == true)
+            {
+                bool isNotNumerical = true;
+                for (int i = 0; i < keyInput.Text.Length; i++)
+                {
+                    if (!Char.IsLetter(keyInput.Text[i])) isNotNumerical = false; // Sprawdzam, czy klucz jest poprawny
+                }
+
+                if (keyInput.Text.Length > 0 && isNotNumerical)
+                {
+                    try // Przydatna rzecz
+                    {
+                        key = keyInput.Text;
+                    }
+                    catch (Exception exc)
+                    {
+                        MessageBox.Show($"Error: {exc.Message}");
+                        return;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Podaj poprawny klucz!");
+                    return;
+                }
             }
 
 
@@ -452,6 +562,7 @@ namespace Projekt_02._25
             else if (fenceCipher.IsSelected)
             {
                 cipher = 3;
+                output = fenceDecode(input, fenceHeight);
             }
 
             endecodeOutput.Text = output;
