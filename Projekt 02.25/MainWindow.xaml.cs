@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -22,6 +24,7 @@ namespace Projekt_02._25
     /// </summary>
     public partial class MainWindow : Window
     {
+        string filePath = string.Empty;
         string attributeRegex = "^[0-9]*$";
 
         public MainWindow()
@@ -149,11 +152,11 @@ namespace Projekt_02._25
         public string affineDecode(string input, int a, int b)
         {
             //D(x)= a^−1*(x−b) mod 26 (wzór do deszyfrowania z tuto)
-
             string output = "";
-            int aInverse = 0;
+            int aInverse = -1;
 
-            for (int i = 0; i < 26; i++) //Do odzszyfrowania szyfrem afinicznym potrzebujemy a^-1, tak je znajdujemy:
+            // Znajduję odwrotność modularną a mod 26 
+            for (int i = 1; i < 26; i++)  
             {
                 if ((a * i) % 26 == 1)
                 {
@@ -162,14 +165,19 @@ namespace Projekt_02._25
                 }
             }
 
+            // Jeśli nie znaleziono odwrotności, a jest niepoprawne
+            if (aInverse == -1)
+                return "Nie udało się odszyfrować wiadomości";
+
             foreach (char c in input)
             {
                 if (char.IsLetter(c))
                 {
                     char baseChar = char.IsUpper(c) ? 'A' : 'a';
-                    int x = c - baseChar; // Zamieniam znak na zakres 0-25 (żeby było tak jak w tuto)
+                    int x = c - baseChar;
 
-                    int decodedChar = (aInverse * (x - b + 26)) % 26;
+                    // Upewniamy się, że wynik nie jest ujemny
+                    int decodedChar = (aInverse * ((x - b + 26) % 26)) % 26;
                     output += (char)(baseChar + decodedChar);
                 }
                 else
@@ -180,6 +188,7 @@ namespace Projekt_02._25
 
             return output;
         }
+
 
         public string fenceEncode(string input, int fenceHeight) //Doesn't handle spaces
         {
@@ -598,6 +607,63 @@ namespace Projekt_02._25
                     keyPANEL.Visibility = Visibility.Visible; 
                     break;
             }
+        }
+
+        private void New_Click(object sender, RoutedEventArgs e)
+        {
+            endecodeInput.Text = string.Empty;
+            endecodeOutput.Text= string.Empty;
+            aInput.Text = string.Empty;
+            bInput.Text = string.Empty;
+            keyInput.Text = string.Empty;
+            shiftInput.Text = string.Empty;
+            caesarCipher.IsSelected = false;
+            vigenereCipher.IsSelected = false;
+            affineCipher.IsSelected = false;
+            fenceCipher.IsSelected = false;
+            Expander.IsExpanded = false;
+        }
+
+        private void saveAs()
+        {
+            Microsoft.Win32.SaveFileDialog saveAsPrompt = new Microsoft.Win32.SaveFileDialog();
+            saveAsPrompt.FileName = "szyfr"; // Default file name
+            saveAsPrompt.DefaultExt = ".text"; // Default file extension
+            saveAsPrompt.Filter = "Text documents (.txt)|*.txt"; // Filter files by extension
+
+            // Show save file dialog box
+            Nullable<bool> result = saveAsPrompt.ShowDialog();
+
+            // Process save file dialog box results
+            if (result == true)
+            {
+                // Save document
+                filePath = saveAsPrompt.FileName;
+            }
+            File.WriteAllText(filePath, endecodeOutput.Text);
+        }
+
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            if(filePath != String.Empty)
+            {
+                File.WriteAllText(filePath, endecodeOutput.Text);
+            }
+            else
+            {
+                saveAs();
+            }
+            
+        }
+
+        private void SaveAs_Click(object sender, RoutedEventArgs e)
+        {
+            saveAs();
+        }
+
+        private void Kill_Click(object sender, RoutedEventArgs e)
+        {
+            Process.GetCurrentProcess().Kill();
         }
     }
 }

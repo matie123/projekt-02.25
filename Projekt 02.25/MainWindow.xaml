@@ -17,9 +17,10 @@
         </Grid.RowDefinitions>
         <Menu Grid.ColumnSpan="2">
             <MenuItem Header="Plik">
-                <MenuItem Header="Nowy"></MenuItem>
-                <MenuItem Header="Zapisz"></MenuItem>
-                <MenuItem Header="Zakończ" InputGestureText="Alt+F4"></MenuItem>
+                <MenuItem Header="Nowy" Click="New_Click"></MenuItem>
+                <MenuItem Header="Zapisz" Click="Save_Click"></MenuItem>
+                <MenuItem Header="Zapisz jako" Click="SaveAs_Click"></MenuItem>
+                <MenuItem Header="Zakończ" InputGestureText="Alt+F4" Click="Kill_Click"></MenuItem>
             </MenuItem>
             <MenuItem Header="Edycja">
                 <MenuItem Header="Kopiuj"></MenuItem>
@@ -52,7 +53,7 @@
         <GroupBox Header="Ustawienia szyfrowania/deszyfrowania" Grid.Row="1" Grid.Column="0">
             <StackPanel>
                 <Label>Algorytm szyfrujący: </Label>
-                <Expander IsExpanded="False">
+                <Expander IsExpanded="False" x:Name="Expander">
                     <ListBox x:Name="cipherListBox" SelectionChanged="ListBox_SelectionChanged">
                         <ListBoxItem x:Name="caesarCipher">Szyfr Cezara</ListBoxItem>
                         <ListBoxItem x:Name="vigenereCipher">Szyfr Vigenère’a</ListBoxItem>
