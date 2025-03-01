@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Projekt_02._25
 {
@@ -664,6 +665,80 @@ namespace Projekt_02._25
         private void Kill_Click(object sender, RoutedEventArgs e)
         {
             Process.GetCurrentProcess().Kill();
+        }
+
+        private void Copy_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(endecodeOutput.Text);
+        }
+
+        private void Paste_Click(object sender, RoutedEventArgs e)
+        {
+            endecodeInput.Text = Clipboard.GetText();
+        }
+
+        private void Cut_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(endecodeOutput.Text);
+            endecodeOutput.Text = String.Empty;
+            endecodeInput.Text = String.Empty;
+        }
+
+        private void FontSize_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem menuItem)
+            {
+                double fontSize = double.Parse(menuItem.Header.ToString()); //Parse do konwersji
+                endecodeInput.FontSize = fontSize;
+                endecodeOutput.FontSize = fontSize;
+
+                fontSize12.IsChecked = false;
+                fontSize14.IsChecked = false;
+                fontSize16.IsChecked = false;
+                fontSize18.IsChecked = false;
+                fontSize20.IsChecked = false;
+                fontSize22.IsChecked = false;
+
+                menuItem.IsChecked = !menuItem.IsChecked;
+
+            }
+        }
+
+        private void FontFamily_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem menuItem) 
+            { 
+                
+                string fontName = menuItem.Header.ToString();
+                endecodeInput.FontFamily = new FontFamily(fontName);
+                endecodeOutput.FontFamily = new FontFamily(fontName);
+
+                arialFont.IsChecked = false;
+                timesNRFont.IsChecked = false;
+                verdanaFont.IsChecked = false;
+                calibriFont.IsChecked = false;
+
+                menuItem.IsChecked = !menuItem.IsChecked;
+            }
+
+            
+        }
+
+        private void Bold_Click(object sender, RoutedEventArgs e)
+        {
+            if(sender is MenuItem menuItem)
+            {
+                endecodeInput.FontWeight = endecodeInput.FontWeight == FontWeights.Bold ? FontWeights.Normal : FontWeights.Bold;
+                endecodeOutput.FontWeight = endecodeOutput.FontWeight == FontWeights.Bold ? FontWeights.Normal : FontWeights.Bold;
+                
+                menuItem.IsChecked = !menuItem.IsChecked;
+            }
+        }
+
+        private void AboutApp_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Nazwa programu: Aplikacja do szyfrowania/deszyfrowania\nAutor: Matierych\nAktualna wersja: 1.0.5" +
+                "\nOpis: Prosta aplikacja do szyfrowania oraz deszyfrowania ciągów znaków");
         }
     }
 }
