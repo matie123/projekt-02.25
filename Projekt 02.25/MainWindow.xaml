@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Projekt_02._25"
         mc:Ignorable="d"
-        Title="Aplikacja do szyfrowania/deszyfrowania" Height="650" Width="600">
+        Title="Aplikacja do szyfrowania/deszyfrowania" Height="650" Width="600"
+        Background="#2C3E50" Foreground="White">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
@@ -15,7 +16,7 @@
             <RowDefinition Height="0.03*"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        <Menu Grid.ColumnSpan="2">
+        <Menu Grid.ColumnSpan="2" Background="LightGray">
             <MenuItem Header="Plik">
                 <MenuItem Header="Nowy" Click="New_Click"></MenuItem>
                 <MenuItem Header="Zapisz" Click="Save_Click"></MenuItem>
@@ -51,9 +52,9 @@
             </MenuItem>
         </Menu>
 
-        <GroupBox Header="Ustawienia szyfrowania/deszyfrowania" Grid.Row="1" Grid.Column="0">
+        <GroupBox Header="Ustawienia szyfrowania/deszyfrowania" Grid.Row="1" Grid.Column="0" BorderThickness="0">
             <StackPanel>
-                <Label>Algorytm szyfrujący: </Label>
+                <Label FontSize="18">Algorytm szyfrujący:</Label>
                 <Expander IsExpanded="False" x:Name="Expander">
                     <ListBox x:Name="cipherListBox" SelectionChanged="ListBox_SelectionChanged">
                         <ListBoxItem x:Name="caesarCipher">Szyfr Cezara</ListBoxItem>
@@ -64,31 +65,31 @@
                 </Expander>
 
                 <StackPanel Visibility="Collapsed" x:Name="shiftPANEL" Orientation="Horizontal" Margin="0, 0, 0, 5">
-                    <Label MinWidth="100">Przesunięcie:</Label>
-                    <TextBox PreviewTextInput="attribute_PreviewTextInput" PreviewKeyDown="attribute_PreviewKeyDown" x:Name="shiftInput" Width="150"></TextBox>
+                    <Label MinWidth="100" FontSize="14">Przesunięcie:</Label>
+                    <TextBox VerticalContentAlignment="Center" PreviewTextInput="attribute_PreviewTextInput" PreviewKeyDown="attribute_PreviewKeyDown" x:Name="shiftInput" Width="150"></TextBox>
                 </StackPanel>
                 <StackPanel Visibility="Collapsed" x:Name="keyPANEL" Orientation="Horizontal" Margin="0, 0, 0, 5">
-                    <Label MinWidth="100">Klucz:</Label>
-                    <TextBox PreviewKeyDown="attribute_PreviewKeyDown" x:Name="keyInput" Width="150"></TextBox>
+                    <Label MinWidth="100" FontSize="14">Klucz:</Label>
+                    <TextBox VerticalContentAlignment="Center" PreviewKeyDown="attribute_PreviewKeyDown" x:Name="keyInput" Width="150"></TextBox>
                 </StackPanel>
                 <StackPanel Visibility="Collapsed" x:Name="aPANEL" Orientation="Horizontal" Margin="0, 0, 0, 5">
-                    <Label MinWidth="100">Wartość A:</Label>
-                    <TextBox PreviewTextInput="attribute_PreviewTextInput" PreviewKeyDown="attribute_PreviewKeyDown" x:Name="aInput" Width="150"></TextBox>
+                    <Label MinWidth="100" FontSize="14">Wartość A:</Label>
+                    <TextBox VerticalContentAlignment="Center" PreviewTextInput="attribute_PreviewTextInput" PreviewKeyDown="attribute_PreviewKeyDown" x:Name="aInput" Width="150"></TextBox>
                 </StackPanel>
                 <StackPanel Visibility="Collapsed" x:Name="bPANEL" Orientation="Horizontal" Margin="0, 0, 0, 5">
-                    <Label MinWidth="100">Wartość B:</Label>
-                    <TextBox PreviewTextInput="attribute_PreviewTextInput" PreviewKeyDown="attribute_PreviewKeyDown" x:Name="bInput" Width="150"></TextBox>
+                    <Label MinWidth="100" FontSize="14">Wartość B:</Label>
+                    <TextBox VerticalContentAlignment="Center" PreviewTextInput="attribute_PreviewTextInput" PreviewKeyDown="attribute_PreviewKeyDown" x:Name="bInput" Width="150"></TextBox>
                 </StackPanel>
-                <Label>Tekst szyfrowany/deszyfrowany(max.150 znaków):</Label>
+                <Label FontSize="16">Tekst szyfrowany/deszyfrowany(max.150 znaków):</Label>
                 <TextBox x:Name="endecodeInput" Height="100" MaxLength="150" TextWrapping="Wrap"></TextBox>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Click="Encode" FontSize="20" Margin="5">Szyfruj!</Button>
-                    <Button Click="Decode" FontSize="20" Margin="5">Deszyfruj!</Button>
+                    <Button Click="Encode" FontSize="20" Margin="5" Background="#FF6AB16A">Szyfruj!</Button>
+                    <Button Click="Decode" FontSize="20" Margin="5" Background="IndianRed">Deszyfruj!</Button>
                 </StackPanel>
-                <Label>Tekst zaszyfrowany/odszyfrowany:</Label>
+                <Label FontSize="16">Tekst zaszyfrowany/odszyfrowany:</Label>
                 <TextBox x:Name="endecodeOutput" Height="100" IsReadOnly="True" TextWrapping="Wrap"></TextBox>
             </StackPanel>
         </GroupBox>
-        
+
     </Grid>
 </Window>
