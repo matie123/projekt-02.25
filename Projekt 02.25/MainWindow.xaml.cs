@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -311,13 +311,51 @@ namespace Projekt_02._25
                 return;
             }
 
-            int cipher = -1; //0 - cezara 1 - vigenera(czy jak mu tam) 2 - affine 3 - płotkowy **Czy to jest potrzebne?
+            
             string input = endecodeInput.Text, output = "";
             string key = "";
             int shift = 0; //For Caesar cipher
             int aValue = 0, bValue = 0, fenceHeight = 0; //For affine cipher
 
-            if (caesarCipher.IsSelected == true)
+            for (int i = 0; i < input.Length; i++)
+            {
+                bool uppercase = Char.IsUpper(input[i]);
+                char character = input[i];
+
+                switch (input[i])
+                {
+                    //Ą, Ć, Ę, Ł, Ń, Ó, Ś, Ż, Ź
+                    case 'Ą':
+                        input = input.Remove(i, 1).Insert(i, uppercase ? "A" : "a");
+                        break;
+                    case 'Ć':
+                        input = input.Remove(i, 1).Insert(i, uppercase ? "C" : "c");
+                        break;
+                    case 'Ę':
+                        input = input.Remove(i, 1).Insert(i, uppercase ? "E" : "e");
+                        break;
+                    case 'Ł':
+                        input = input.Remove(i, 1).Insert(i, uppercase ? "L" : "l");
+                        break;
+                    case 'Ń':
+                        input = input.Remove(i, 1).Insert(i, uppercase ? "N" : "n");
+                        break;
+                    case 'Ó':
+                        input = input.Remove(i, 1).Insert(i, uppercase ? "O" : "o");
+                        break;
+                    case 'Ś':
+                        input = input.Remove(i, 1).Insert(i, uppercase ? "S" : "s");
+                        break;
+                    case 'Ź':
+                        input = input.Remove(i, 1).Insert(i, uppercase ? "Z" : "z");
+                        break;
+                    case 'Ż':
+                        input = input.Remove(i, 1).Insert(i, uppercase ? "Z" : "z");
+                        break;
+                }
+            }
+
+                if (caesarCipher.IsSelected == true)
             {
                 if (shiftInput.Text.Length > 0)
                 {
@@ -414,7 +452,6 @@ namespace Projekt_02._25
             //SZYFRY
             if (caesarCipher.IsSelected) //CEZAR
             {
-                cipher = 0;
                 output = caesarEncode(input, shift);
             }
 
@@ -425,19 +462,16 @@ namespace Projekt_02._25
                     MessageBox.Show("Podaj klucz!");
                     return;
                 }
-                cipher = 1;
                 output = vigenereEncode(input, key);
             }
 
             else if (affineCipher.IsSelected) //AFINICZNY (tak to się po polsku pisze?)
             {
-                cipher = 2;
                 output = affineEncode(input, aValue, bValue);
             }
 
             else if (fenceCipher.IsSelected) // PŁOTKOWY
             {
-                cipher = 3;
                 output = fenceEncode(input, fenceHeight);
             }
 
@@ -452,7 +486,7 @@ namespace Projekt_02._25
                 return;
             }
 
-            int cipher = -1; //0 - cezara 1 - vigenera(czy jak mu tam) 2 - affine 3 - płotkowy
+
             string input = endecodeInput.Text, output = "";
             int shift = 0, aValue = 0, bValue = 0, fenceHeight = 0;
             string key = keyInput.Text;
@@ -551,7 +585,6 @@ namespace Projekt_02._25
 
             if (caesarCipher.IsSelected)
             {
-                cipher = 0;
                 output = caesarDecode(input, shift);
             }
             else if (vigenereCipher.IsSelected)
@@ -561,17 +594,14 @@ namespace Projekt_02._25
                     MessageBox.Show("Podaj przesunięcie!");
                     return;
                 }
-                cipher = 1;
                 output = vigenereDecode(input, key);
             }
             else if (affineCipher.IsSelected)
             {
-                cipher = 2;
                 output = affineDecode(input, aValue, bValue);
             }
             else if (fenceCipher.IsSelected)
             {
-                cipher = 3;
                 output = fenceDecode(input, fenceHeight);
             }
 
