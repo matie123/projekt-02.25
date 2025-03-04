@@ -491,6 +491,43 @@ namespace Projekt_02._25
             int shift = 0, aValue = 0, bValue = 0, fenceHeight = 0;
             string key = keyInput.Text;
 
+for (int i = 0; i < input.Length; i++)
+            {
+                bool uppercase = Char.IsUpper(input[i]);
+                char character = input[i];
+
+                switch (input[i])
+                {
+                    //Ą, Ć, Ę, Ł, Ń, Ó, Ś, Ż, Ź
+                    case 'Ą':
+                        input = input.Remove(i, 1).Insert(i, uppercase ? "A" : "a");
+                        break;
+                    case 'Ć':
+                        input = input.Remove(i, 1).Insert(i, uppercase ? "C" : "c");
+                        break;
+                    case 'Ę':
+                        input = input.Remove(i, 1).Insert(i, uppercase ? "E" : "e");
+                        break;
+                    case 'Ł':
+                        input = input.Remove(i, 1).Insert(i, uppercase ? "L" : "l");
+                        break;
+                    case 'Ń':
+                        input = input.Remove(i, 1).Insert(i, uppercase ? "N" : "n");
+                        break;
+                    case 'Ó':
+                        input = input.Remove(i, 1).Insert(i, uppercase ? "O" : "o");
+                        break;
+                    case 'Ś':
+                        input = input.Remove(i, 1).Insert(i, uppercase ? "S" : "s");
+                        break;
+                    case 'Ź':
+                        input = input.Remove(i, 1).Insert(i, uppercase ? "Z" : "z");
+                        break;
+                    case 'Ż':
+                        input = input.Remove(i, 1).Insert(i, uppercase ? "Z" : "z");
+                        break;
+                }
+            }
 
             if (caesarCipher.IsSelected == true)
             {
@@ -657,21 +694,26 @@ namespace Projekt_02._25
 
         private void saveAs()
         {
-            Microsoft.Win32.SaveFileDialog saveAsPrompt = new Microsoft.Win32.SaveFileDialog();
-            saveAsPrompt.FileName = "szyfr"; // Default file name
-            saveAsPrompt.DefaultExt = ".text"; // Default file extension
-            saveAsPrompt.Filter = "Text documents (.txt)|*.txt"; // Filter files by extension
+            try { 
+                Microsoft.Win32.SaveFileDialog saveAsPrompt = new Microsoft.Win32.SaveFileDialog();
+                saveAsPrompt.FileName = "szyfr"; // Default file name
+                saveAsPrompt.DefaultExt = ".text"; // Default file extension
+                saveAsPrompt.Filter = "Text documents (.txt)|*.txt"; // Filter files by extension
 
-            // Show save file dialog box
-            Nullable<bool> result = saveAsPrompt.ShowDialog();
+                // Show save file dialog box
+                Nullable<bool> result = saveAsPrompt.ShowDialog();
 
-            // Process save file dialog box results
-            if (result == true)
-            {
-                // Save document
-                filePath = saveAsPrompt.FileName;
+                // Process save file dialog box results
+                if (result == true)
+                {
+                    // Save document
+                    filePath = saveAsPrompt.FileName;
+                }
+                File.WriteAllText(filePath, endecodeOutput.Text);
+                }
+            catch(Exception e) {
+                return;
             }
-            File.WriteAllText(filePath, endecodeOutput.Text);
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
